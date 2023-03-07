@@ -11,13 +11,13 @@
         internal CarCovenant AddCar(int carId)
         {
             this.carId = carId;
-            car = TestData.cars[carId];
+            car = NET1.cars[carId];
             return this;
         }
         internal CarCovenant AddCovenant(int covenantId)
         {
             this.covenantId = covenantId;
-            covenant = TestData.covenants[covenantId];
+            covenant = NET1.covenants[covenantId];
             return this;
         }
     }

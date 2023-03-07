@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NET1_Snigur.Variant20
 {
-    class TestData
+    class NET1
     {
         public static List<Client> clients = new List<Client>()
         {
@@ -32,5 +32,35 @@ namespace NET1_Snigur.Variant20
             new Covenant(5, 2, 1, new DateTime(2023, 3, 3), new DateTime(2023, 3, 8)),
             new Covenant(6, 2, 4, new DateTime(2023, 3, 2), new DateTime(2023, 3, 4))
         };
+
+        public static void StartProgram()
+        {
+            Rental rental = new Rental()
+                .SetName("New rental")
+                .SetCars(cars)
+                .SetClients(clients);
+
+            rental.Cars();
+            rental.ClientsAsObjects();
+            rental.BClassCars();
+            rental.AvailableCars();
+            rental.Profit();
+            rental.Names();
+            rental.Requests();
+            rental.NeverRenderedCars();
+            rental.ClientsWithCars();
+            rental.FrequentClients();
+
+            rental.IncreasingValue();
+            rental.CarsWithRentalCost();
+            rental.RequestsInPeriod(new DateTime(2023, 03, 1), new DateTime(2023, 03, 5));
+            rental.Cheapest();
+            rental.AverageCost();
+            rental.MoreThanCertain(5000F);
+            rental.PhoneByComma();
+            rental.ClientsWhoСontact();
+            rental.CarsConcate();
+            rental.NeverRentedCars();
+        }
     }
 }

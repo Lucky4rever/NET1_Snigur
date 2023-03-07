@@ -45,7 +45,7 @@ namespace NET1_Snigur.Example
             return q.ToList();
         }
 
-        public static void testProgram() {
+        public static void StartProgram() {
             Console.OutputEncoding = Encoding.UTF8;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Прості запити");

@@ -17,6 +17,10 @@ namespace NET1_Snigur.Variant20
             this.name = name;
             return this;
         }
+        public Rental()
+        {
+            NET1.covenants.ForEach(covenant => { NewCovenant(covenant); });
+        }
         public Rental SetCars(List<Car> cars)
         {
             this.cars = cars;
@@ -25,11 +29,6 @@ namespace NET1_Snigur.Variant20
         public Rental SetClients(List<Client> clients)
         {
             this.clients = clients;
-            return this;
-        }
-        public Rental SetCovenants(List<Covenant> covenants)
-        {
-            covenants.ForEach(covenant => { NewCovenant(covenant); });
             return this;
         }
 

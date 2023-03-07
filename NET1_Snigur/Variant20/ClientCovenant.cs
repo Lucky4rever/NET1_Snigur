@@ -11,13 +11,13 @@
         internal ClientCovenant AddClient(int clientId)
         {
             this.clientId = clientId;
-            client = TestData.clients[clientId];
+            client = NET1.clients[clientId];
             return this;
         }
         internal ClientCovenant AddCovenant(int covenantId)
         {
             this.covenantId = covenantId;
-            covenant = TestData.covenants[covenantId];
+            covenant = NET1.covenants[covenantId];
             return this;
         }
     }

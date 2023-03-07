@@ -59,7 +59,7 @@
     <Compile Include="Variant20\CarCovenant.cs" />
     <Compile Include="Variant20\ClientCovenant.cs" />
     <Compile Include="Variant20\IFunctional.cs" />
-    <Compile Include="Variant20\TestData.cs" />
+    <Compile Include="Variant20\NET1.cs" />
     <Compile Include="Variant20\Covenant.cs" />
     <Compile Include="Variant20\Car.cs" />
     <Compile Include="Variant20\Client.cs" />
