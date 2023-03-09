@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,10 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Example\Data.cs" />
-    <Compile Include="Example\DataEqualityComparer.cs" />
-    <Compile Include="Example\DataLink.cs" />
-    <Compile Include="Example\TestProgram.cs" />
+    <Compile Include="Examples\NET1\Data.cs" />
+    <Compile Include="Examples\NET1\DataEqualityComparer.cs" />
+    <Compile Include="Examples\NET1\DataLink.cs" />
+    <Compile Include="Examples\NET1\TestProgram.cs" />
+    <Compile Include="Variant20\CustomStructuresAndClasses\IMoney.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variant15\Author.cs" />
@@ -56,14 +58,19 @@
     <Compile Include="Variant15\LibraryBook.cs" />
     <Compile Include="Variant15\PublishingHouse.cs" />
     <Compile Include="Variant15\TestData.cs" />
-    <Compile Include="Variant20\CarCovenant.cs" />
-    <Compile Include="Variant20\ClientCovenant.cs" />
-    <Compile Include="Variant20\IFunctional.cs" />
-    <Compile Include="Variant20\NET1.cs" />
-    <Compile Include="Variant20\Covenant.cs" />
-    <Compile Include="Variant20\Car.cs" />
-    <Compile Include="Variant20\Client.cs" />
-    <Compile Include="Variant20\Rental.cs" />
+    <Compile Include="Variant20\NET1\CarCovenant.cs" />
+    <Compile Include="Variant20\NET1\ClientCovenant.cs" />
+    <Compile Include="Variant20\NET1\Data.cs" />
+    <Compile Include="Variant20\NET1\Deposit.cs" />
+    <Compile Include="Variant20\NET1\Functional.cs" />
+    <Compile Include="Variant20\CustomStructuresAndClasses\Money.cs" />
+    <Compile Include="Variant20\NET1\Invoker\Command.cs" />
+    <Compile Include="Variant20\NET1\Invoker\ICommand.cs" />
+    <Compile Include="Variant20\NET1\Invoker\Invoker.cs" />
+    <Compile Include="Variant20\NET1\Covenant.cs" />
+    <Compile Include="Variant20\NET1\Car.cs" />
+    <Compile Include="Variant20\NET1\Client.cs" />
+    <Compile Include="Variant20\NET1\Rental.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
