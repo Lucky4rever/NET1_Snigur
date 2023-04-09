@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NET1_Snigur.Example
+namespace DOTNET.Examples.NET1
 {
     public class TestCode {
         public TestCode() { }

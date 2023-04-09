@@ -1,4 +1,4 @@
-﻿namespace NET1_Snigur.Variant20.NET1
+﻿namespace DOTNET.Variant20.NET1
 {
     class CarCovenant
     {

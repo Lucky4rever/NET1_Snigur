@@ -6,12 +6,27 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2960AFCC-0BA0-4AE5-AEE0-D2B55FC29FEB}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>NET1_Snigur</RootNamespace>
-    <AssemblyName>NET1_Snigur</AssemblyName>
+    <RootNamespace>DOTNET</RootNamespace>
+    <AssemblyName>DOTNET</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,8 +47,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>L.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
@@ -42,13 +61,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Examples\NET1\Data.cs" />
     <Compile Include="Examples\NET1\DataEqualityComparer.cs" />
     <Compile Include="Examples\NET1\DataLink.cs" />
     <Compile Include="Examples\NET1\TestProgram.cs" />
-    <Compile Include="Variant20\CustomStructuresAndClasses\IMoney.cs" />
+    <Compile Include="Examples\NET2\TestProgram.cs" />
+    <Compile Include="Examples\NET2\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variant15\Author.cs" />
@@ -58,10 +79,10 @@
     <Compile Include="Variant15\LibraryBook.cs" />
     <Compile Include="Variant15\PublishingHouse.cs" />
     <Compile Include="Variant15\TestData.cs" />
+    <Compile Include="Variant20\GeneralTaskNumber.cs" />
     <Compile Include="Variant20\NET1\CarCovenant.cs" />
     <Compile Include="Variant20\NET1\ClientCovenant.cs" />
     <Compile Include="Variant20\NET1\Data.cs" />
-    <Compile Include="Variant20\NET1\Deposit.cs" />
     <Compile Include="Variant20\NET1\Functional.cs" />
     <Compile Include="Variant20\CustomStructuresAndClasses\Money.cs" />
     <Compile Include="Variant20\NET1\Invoker\Command.cs" />
@@ -71,10 +92,38 @@
     <Compile Include="Variant20\NET1\Car.cs" />
     <Compile Include="Variant20\NET1\Client.cs" />
     <Compile Include="Variant20\NET1\Rental.cs" />
+    <Compile Include="Variant20\NET2\ComponentCreator\CarComponentCreator.cs" />
+    <Compile Include="Variant20\NET2\ComponentCreator\ClientComponentCreator.cs" />
+    <Compile Include="Variant20\NET2\ComponentCreator\ComponentCreatorContext.cs" />
+    <Compile Include="Variant20\NET2\ComponentCreator\CovenantComponentCreator.cs" />
+    <Compile Include="Variant20\NET2\ComponentCreator\IComponentCreator.cs" />
+    <Compile Include="Variant20\NET2\Functional.cs" />
+    <Compile Include="Variant20\NET2\PropertyReader.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\CarsXMLConverter.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\ClientsXMLConverter.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\CovenantsXMLConverter.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\IXMLConverter.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\XMLConverter.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\XMLConverterContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="L.ico" />
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NET1_Snigur.Variant20.NET1;
+using DOTNET.Variant20.NET1;
 
-namespace NET1_Snigur.Variant20.NET1.Invoker
+namespace DOTNET.Variant20.NET1.Invoker
 {
     class Invoker
     {
@@ -22,6 +22,31 @@ namespace NET1_Snigur.Variant20.NET1.Invoker
             {
                 this._action.Execute();
             }
+        }
+
+        public void StartDoingBlockOfAction(Dictionary<GeneralTaskNumber, Action> actions)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Start doing action block of action...");
+            Console.ResetColor();
+            Console.WriteLine();
+
+            foreach (var action in actions)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Start doing action {action.Key}...");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Command command = new Command(action.Value);
+                SetAction(command);
+                StartDoingAction();
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Done!");
+            Console.ResetColor();
+            Console.WriteLine();
         }
     }
 }

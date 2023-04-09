@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DOTNET.Variant20.NET1.Invoker
+namespace DOTNET.Variant20.NET2.ComponentCreator
 {
-    interface ICommand
+    interface IComponentCreator
     {
-        void Execute();
+        void NewComponent();
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET1_Snigur.Variant20.NET1.Invoker
+namespace DOTNET.Variant20.NET1.Invoker
 {
     class Command : ICommand
     {

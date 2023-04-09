@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET1_Snigur.Example
+namespace DOTNET.Examples.NET1
 {
     public class DataEqualityComparer : IEqualityComparer<Data> {
         public bool Equals(Data x, Data y) {

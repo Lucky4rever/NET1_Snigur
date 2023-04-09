@@ -1,19 +1,31 @@
 ﻿using System;
 
-namespace NET1_Snigur.Variant20.NET1
+namespace DOTNET.Variant20.NET1
 {
     class Covenant
     {
         public int Id { get; }
 
-        public Deposit<decimal> Deposit { get; }
-        //TODO consistency
+        public decimal Deposit { get; set; }
+
+        public void CheckDate()
+        {
+            try
+            {
+                if (ReturnDate <= DateTime.Today)
+                {
+                    Deposit = default;
+                }
+            }
+            catch (ArgumentNullException) { };
+        }
+
         private decimal IntermediatPrice { get; set; }
-        public Money<decimal> Price 
+        public decimal Price 
         { 
             get 
             { 
-                return new Money<decimal>(IntermediatPrice); 
+                return IntermediatPrice; 
             }
             set
             {
@@ -21,7 +33,7 @@ namespace NET1_Snigur.Variant20.NET1
 
                 IntermediatPrice = (ReturnDate - IssueDate).Days * 
                     (100 - (DateTime.Today.Year - car.Year)) *
-                    car.Price.Amount / 250;
+                    car.Price / 250;
             }
         }
 
@@ -56,12 +68,12 @@ namespace NET1_Snigur.Variant20.NET1
             this.IssueDate = IssueDate;
             this.ReturnDate = ReturnDate;
 
-            Price = new Money<decimal>(IntermediatPrice);
-            Deposit = new Deposit<decimal>(Data.Cars[CarId].Price.Amount / 50m, ReturnDate);
+            Price = IntermediatPrice;
+            Deposit = Data.Cars[CarId].Price / 50m;
         }
         public override string ToString()
         {
-            return "Client №" + ClientId + " took car №" + CarId + " from " + IssueDate.ToString("yyyy.MM.DD") + " to " + ReturnDate.ToString("yyyy.MM.DD");
+            return "Client №" + ClientId + " took car №" + CarId + " from " + IssueDate.ToString("yyyy.MM.dd") + " to " + ReturnDate.ToString("yyyy.MM.dd");
         }
     }
 }

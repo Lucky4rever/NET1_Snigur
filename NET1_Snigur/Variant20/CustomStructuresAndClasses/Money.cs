@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NET1_Snigur.Variant20
+namespace DOTNET.Variant20
 {
-    public class Money<T> : IMoney<T>
+    public class Money<T> 
     {
         public T Amount { get; }
 

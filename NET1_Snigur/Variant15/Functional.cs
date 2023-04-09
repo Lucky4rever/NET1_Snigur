@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET1_Snigur.Variant15 {
+namespace DOTNET.Variant15 {
     class Functional
     {
         private static TestData testData = new TestData();
