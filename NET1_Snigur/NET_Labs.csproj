@@ -92,19 +92,35 @@
     <Compile Include="Variant20\NET1\Car.cs" />
     <Compile Include="Variant20\NET1\Client.cs" />
     <Compile Include="Variant20\NET1\Rental.cs" />
+    <Compile Include="Variant20\NET2\FunctionalBuilder.cs" />
     <Compile Include="Variant20\NET2\ComponentCreator\CarComponentCreator.cs" />
     <Compile Include="Variant20\NET2\ComponentCreator\ClientComponentCreator.cs" />
     <Compile Include="Variant20\NET2\ComponentCreator\ComponentCreatorContext.cs" />
     <Compile Include="Variant20\NET2\ComponentCreator\CovenantComponentCreator.cs" />
     <Compile Include="Variant20\NET2\ComponentCreator\IComponentCreator.cs" />
     <Compile Include="Variant20\NET2\Functional.cs" />
-    <Compile Include="Variant20\NET2\PropertyReader.cs" />
+    <Compile Include="Variant20\NET2\IBuilder.cs" />
+    <Compile Include="Variant20\NET2\OutputHelper.cs" />
     <Compile Include="Variant20\NET2\XMLConverter\CarsXMLConverter.cs" />
     <Compile Include="Variant20\NET2\XMLConverter\ClientsXMLConverter.cs" />
     <Compile Include="Variant20\NET2\XMLConverter\CovenantsXMLConverter.cs" />
     <Compile Include="Variant20\NET2\XMLConverter\IXMLConverter.cs" />
-    <Compile Include="Variant20\NET2\XMLConverter\XMLConverter.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\VariableNames\CovenantVariableNames.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\VariableNames\ClientVariableNames.cs" />
+    <Compile Include="Variant20\NET2\XMLConverter\VariableNames\CarVariableNames.cs" />
     <Compile Include="Variant20\NET2\XMLConverter\XMLConverterContext.cs" />
+    <Compile Include="Variant20\NET3\Factory\INewRectangle.cs" />
+    <Compile Include="Variant20\NET3\Factory\INewTriangle.cs" />
+    <Compile Include="Variant20\NET3\Factory\INewCycle.cs" />
+    <Compile Include="Variant20\NET3\Factory\ShapeFactory.cs" />
+    <Compile Include="Variant20\NET3\CustomShape.cs" />
+    <Compile Include="Variant20\NET3\Output.cs" />
+    <Compile Include="Variant20\NET3\Polygon.cs" />
+    <Compile Include="Variant20\NET3\PolygonBuilder.cs" />
+    <Compile Include="Variant20\NET3\Shape\Cycle.cs" />
+    <Compile Include="Variant20\NET3\Shape\IShape.cs" />
+    <Compile Include="Variant20\NET3\Shape\Rectangle.cs" />
+    <Compile Include="Variant20\NET3\Shape\Triangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

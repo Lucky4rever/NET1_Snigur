@@ -1,6 +1,6 @@
 ﻿namespace DOTNET.Variant20.NET1
 {
-    class CarCovenant
+    public class CarCovenant
     {
         public int CarId { get; set; }
         public int CovenantId { get; set; }

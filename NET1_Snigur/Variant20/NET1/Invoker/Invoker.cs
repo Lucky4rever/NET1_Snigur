@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DOTNET.Variant20.NET1;
+using DOTNET.Variant20.NET2;
 
 namespace DOTNET.Variant20.NET1.Invoker
 {
     class Invoker
     {
         private ICommand _action;
-        
+        private LinkedList<ICommand> _actions;
+
         public void SetAction(ICommand action)
         {
             this._action = action;
@@ -24,29 +26,23 @@ namespace DOTNET.Variant20.NET1.Invoker
             }
         }
 
-        public void StartDoingBlockOfAction(Dictionary<GeneralTaskNumber, Action> actions)
+        public void SetBlockOfAction(Dictionary<GeneralTaskNumber, OutputHelper> actions)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Start doing action block of action...");
-            Console.ResetColor();
-            Console.WriteLine();
+            this._actions = new LinkedList<ICommand>();
 
             foreach (var action in actions)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Start doing action {action.Key}...");
-                Console.ResetColor();
-                Console.WriteLine();
-
-                Command command = new Command(action.Value);
-                SetAction(command);
+                Command command = new Command(action.Value.Output());
+                this._actions.AddLast(command);
+            }
+        }
+        public void StartDoingBlockOfAction()
+        {
+            foreach (var action in _actions)
+            {
+                SetAction(action);
                 StartDoingAction();
             }
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Done!");
-            Console.ResetColor();
-            Console.WriteLine();
         }
     }
 }

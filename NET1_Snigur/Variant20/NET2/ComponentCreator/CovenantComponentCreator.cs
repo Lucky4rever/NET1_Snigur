@@ -19,9 +19,6 @@ namespace DOTNET.Variant20.NET2.ComponentCreator
             Console.Write("Set the car ID: ");
             int carId = int.Parse(Console.ReadLine());
 
-            Console.Write("Set client phone: ");
-            string phone = Console.ReadLine();
-
             Console.Write("Set issue date: ");
             DateTime issueDate = DateTime.Parse(Console.ReadLine());
 

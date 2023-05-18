@@ -1,12 +1,25 @@
-﻿namespace DOTNET.Variant20.NET1
+﻿using DOTNET.Variant20.NET2.XMLConverter.VariableNames;
+using System;
+using System.Xml.Serialization;
+
+namespace DOTNET.Variant20.NET1
 {
-    class Client
+    [Serializable, XmlRoot(ElementName = ClientVariableNames.BaseName)]
+    public class Client
     {
+        [XmlAttribute(AttributeName = ClientVariableNames.Id)]
         public int Id { get; set; }
+        
+        [XmlAttribute(AttributeName = ClientVariableNames.Name)]
         public string Name { get; set; }
+
+        [XmlAttribute(AttributeName = ClientVariableNames.Address)]
         public string Address { get; set; }
+        
+        [XmlAttribute(AttributeName = ClientVariableNames.Phone)]
         public string Phone { get; set; }
 
+        public Client() { }
         public Client(int Id, string Name, string Address, string Phone)
         {
             this.Id = Id;

@@ -1,6 +1,9 @@
 ﻿using DOTNET.Variant20.NET1;
+using DOTNET.Variant20.NET2.XMLConverter;
+using DOTNET.Variant20.NET2.XMLConverter.VariableNames;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,478 +55,386 @@ namespace DOTNET.Variant20.NET2
 
     class Functional
     {
-        public Dictionary<GeneralTaskNumber, Action> TaskMap;
+        public Dictionary<GeneralTaskNumber, OutputHelper> TaskMap;
+
+        internal XDocument _docCars = null;
+        internal XDocument _docCovenants = null;
+        internal XDocument _docClients = null;
 
         public Functional()
         {
-            TaskMap = new Dictionary<GeneralTaskNumber, Action>
+            TaskMap = new Dictionary<GeneralTaskNumber, OutputHelper>
             {
-                [TaskNumber.PrintFiles] = PrintFiles,
-                [TaskNumber.Task1] = UniqueCarBrand,
-                [TaskNumber.Task2] = delegate () { CovenantsAfter(new DateTime(2023, 1, 1)); },
-                [TaskNumber.Task3] = ClientsWithCovenants,
-                [TaskNumber.Task4] = SortedClients,
-                [TaskNumber.Task5] = delegate () { PhoneNumberContains("096"); },
-                [TaskNumber.Task6] = SortedCars,
-                [TaskNumber.Task7] = delegate () { SortedXClassCars(Car.CarClasses.B); },
-                [TaskNumber.Task8] = delegate () { ContractWithCar("Audi", "A6"); },
-                [TaskNumber.Task9] = delegate () { ClientWithCar("Audi", "A6"); },
-                [TaskNumber.Task10] = NeverTakenCars,
-                [TaskNumber.Task11] = ClientsWithOver2Request,
-                [TaskNumber.Task12] = SortedClientsWithMoreThen1Car,
-                [TaskNumber.Task13] = UniqueClientWithCarsNames,
-                [TaskNumber.Task14] = AllNames,
-                [TaskNumber.Task15] = SortedClientsWithNewAndLuxuryCars
+                [TaskNumber.PrintFiles] = new OutputHelper("Print all files using LINQ to XML.", () => { return PrintFiles(); }),
+                [TaskNumber.Task1] = new OutputHelper("1. Print unique car brands.", () => { return UniqueCarBrand(); }),
+                [TaskNumber.Task2] = new OutputHelper("2. Print all deal ids dated from date and later.", () => { return CovenantsAfter(new DateTime(2023, 1, 1)); }),
+                [TaskNumber.Task3] = new OutputHelper("3. Print all clients who took cars.", () => { return ClientsWithCovenants(); }),
+                [TaskNumber.Task4] = new OutputHelper("4. Print all clients sorted alphabetically.", () => { return SortedClients(); }),
+                [TaskNumber.Task5] = new OutputHelper("5. Print all customers who have a Phone number containing 096.", () => { return PhoneNumberContains("096"); }),
+                [TaskNumber.Task6] = new OutputHelper("6. Print all car names, sorted by Price.", () => { return SortedCars(); }),
+                [TaskNumber.Task7] = new OutputHelper("7. Print all covenants with cars of class B, sorted by increasing Price.", () => { return SortedXClassCars(Car.CarClasses.B); }),
+                [TaskNumber.Task8] = new OutputHelper("8. Print a list of all contracts with the Audi A6.", () => { return ContractWithCar("Audi", "A6"); }),
+                [TaskNumber.Task9] = new OutputHelper("9. Print all customers who have orders for Audi A6.", () => { return ClientWithCar("Audi", "A6"); }),
+                [TaskNumber.Task10] = new OutputHelper("10. Print all cars that have not been registered for rental.", () => { return NeverTakenCars(); }),
+                [TaskNumber.Task11] = new OutputHelper("11. Print all customers who have more than two orders.", () => { return ClientsWithOver2Request(); }),
+                [TaskNumber.Task12] = new OutputHelper("12. Get a list of customers who have rented at least one car and sort them in ascending order of Name.", () => { return SortedClientsWithMoreThen1Car(); }),
+                [TaskNumber.Task13] = new OutputHelper("13. Print a list of all covenant numbers with the names of the customers who made them and the date of deal.", () => { return UniqueClientWithCarsNames(); }),
+                [TaskNumber.Task14] = new OutputHelper("14. Print a list of all customer and car names.", () => { return AllNames(); }),
+                [TaskNumber.Task15] = new OutputHelper("15. Print all customers who took cars older than 2010 and all customers who took cars of the \"Luxury\" class, and display them in alphabetical order by customer Name.", () => { return SortedClientsWithNewAndLuxuryCars(); })
             };
         }
 
         //=======================Start of the task=======================
 
-        public void PrintFiles()
+        //`Для файлу, створеного в п.2 розробити` як мінімум 15 різних запитів, використовуючи різні дії над отриманими даними
+
+        public IEnumerable<object> PrintFiles()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Print all files using LINQ to XML.");
-            Console.ResetColor();
+            IEnumerable<object> result = Enumerable.Empty<object>();
+            IEnumerable<object> clients = Enumerable.Empty<object>();
+            IEnumerable<object> cars = Enumerable.Empty<object>();
+            IEnumerable<object> covenants = Enumerable.Empty<object>();
 
-            XDocument doc = XDocument.Load("clients.xml");
-
-            var clients = from c in doc.Descendants("client")
+            if (this._docClients != null)
+            {
+                clients = from c in this._docClients.Root.Elements(ClientVariableNames.BaseName)
                           select new Client(
-                              (int)c.Element("id"),
-                              (string)c.Element("name"),
-                              (string)c.Element("address"),
-                              (string)c.Element("phone")
+                              (int)c.Element(ClientVariableNames.Id),
+                              (string)c.Element(ClientVariableNames.Name),
+                              (string)c.Element(ClientVariableNames.Address),
+                              (string)c.Element(ClientVariableNames.Phone)
                           );
-
-            foreach (var client in clients)
-            {
-                Console.WriteLine(client);
             }
 
-            Console.WriteLine();
-
-            doc = XDocument.Load("cars.xml");
-
-            var cars = from c in doc.Descendants("car")
+            if (this._docCars != null)
+            {
+                cars = from c in this._docCars.Root.Elements(CarVariableNames.BaseName)
                        select new Car(
-                           (int)c.Element("id"),
-                           (string)c.Element("brand"),
-                           (string)c.Element("name"),
-                           (Car.CarClasses)(int)c.Element("car-class"),
-                           (decimal)c.Element("price"),
-                           (int)c.Element("year")
+                           int.Parse(c.Element(CarVariableNames.Id).Value),
+                           c.Element(CarVariableNames.Brand).Value,
+                           c.Element(CarVariableNames.Name).Value,
+                           (Car.CarClasses)char.Parse(c.Element(CarVariableNames.CarClass).Value),
+                           decimal.Parse(c.Element(CarVariableNames.Price).Value),
+                           int.Parse(c.Element(CarVariableNames.Year).Value)
                        );
-            foreach (var car in cars)
-            {
-                Console.WriteLine(car);
             }
 
-            Console.WriteLine();
-
-            doc = XDocument.Load("covenants.xml");
-
-            var covenants = from c in doc.Descendants("covenant")
-                       select new Covenant(
-                           int.Parse(c.Element("id").Value),
-                           int.Parse(c.Element("client-id").Value),
-                           int.Parse(c.Element("car-id").Value),
-                           DateTime.Parse(c.Element("issue-date").Value),
-                           DateTime.Parse(c.Element("return-date").Value)
-                       );
-            foreach (var covenant in covenants)
+            if (this._docCovenants != null)
             {
-                Console.WriteLine(covenant);
+                covenants = from c in this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                            select new Covenant(
+                                int.Parse(c.Element(CovenantVariableNames.Id).Value),
+                                int.Parse(c.Element(CovenantVariableNames.ClientId).Value),
+                                int.Parse(c.Element(CovenantVariableNames.CarId).Value),
+                                DateTime.Parse(c.Element(CovenantVariableNames.IssueDate).Value),
+                                DateTime.Parse(c.Element(CovenantVariableNames.ReturnDate).Value)
+                            );
             }
 
-            Console.WriteLine();
+            return clients.Cast<object>()
+                          .Concat(cars.Cast<object>())
+                          .Concat(covenants.Cast<object>());
         }
 
-        public void UniqueCarBrand()
+        public IEnumerable<object> UniqueCarBrand()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("1. Print unique car brands.");
-            Console.ResetColor();
+            IEnumerable<object> brands = null;
 
-            XDocument doc = XDocument.Load("cars.xml");
-
-            var brands = doc.Descendants("car").Select(c => c.Element("brand").Value).Distinct();
-
-            foreach (var brand in brands)
+            if (this._docCars != null)
             {
-                Console.WriteLine(brand);
+                brands = this._docCars.Root.Elements(CarVariableNames.BaseName)
+                        .Select(c => new { c.Element(CarVariableNames.Brand).Value })
+                        .Distinct();
             }
 
-            Console.WriteLine();
+            return brands;
         }
 
-        public void CovenantsAfter(DateTime date)
+        public IEnumerable<object> CovenantsAfter(DateTime date)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("2. Print all deal ids dated from date and later.");
-            Console.ResetColor();
+            IEnumerable<object> covenants = null;
 
-            XDocument doc = XDocument.Load("covenants.xml");
-            var covenants = doc.Descendants("covenant")
-                           .Where(c => DateTime.Parse(c.Element("issue-date").Value) >= date)
-                           .Select(c => new { c.Element("id").Value });
-
-            foreach (var covenant in covenants)
+            if (this._docCovenants != null)
             {
-                Console.WriteLine(covenant);
+                covenants = this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                                .Where(c => DateTime.Parse(c.Element(CovenantVariableNames.IssueDate).Value) >= date)
+                                .Select(c => new { Id = c.Element(CovenantVariableNames.Id).Value });
             }
 
-            Console.WriteLine();
+            return covenants;
         }
 
-        public void ClientsWithCovenants()
+        public IEnumerable<object> ClientsWithCovenants()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("3. Print all clients who took cars.");
-            Console.ResetColor();
+            IEnumerable<object> clients = null;
 
-            XDocument doc = XDocument.Load("clients.xml");
-
-            var clients = from c in doc.Descendants("client")
-                          where (from cov in XDocument.Load("covenants.xml").Descendants("covenant")
-                                 where (int)c.Element("id") == (int)cov.Element("client-id")
-                                 select cov).Any()
-                          select new
-                          {
-                              Id = (int)c.Element("id"),
-                              Name = (string)c.Element("name"),
-                              Address = (string)c.Element("address"),
-                              Phone = (string)c.Element("phone")
-                          };
-
-            foreach (var c in clients)
+            if (this._docCovenants != null && this._docClients != null)
             {
-                Console.WriteLine($"Id: {c.Id}, Name: {c.Name}, Address: {c.Address}, Phone: {c.Phone}");
+                clients = this._docClients.Root.Elements(ClientVariableNames.BaseName)
+                                .Where(c => this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                                .Any(co => (int)co.Element(CovenantVariableNames.ClientId) == (int)c.Element(ClientVariableNames.Id)))
+                                .Select(c => new
+                                {
+                                    Id = (int)c.Element(ClientVariableNames.Id),
+                                    Name = (string)c.Element(ClientVariableNames.Name),
+                                    Address = (string)c.Element(ClientVariableNames.Address),
+                                    Phone = (string)c.Element(ClientVariableNames.Phone)
+                                });
             }
 
-            Console.WriteLine();
+            return clients;
         }
 
-        public void SortedClients()
+        public IEnumerable<object> SortedClients()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("4. Print all clients sorted alphabetically.");
-            Console.ResetColor();
+            IEnumerable<object> clients = null;
 
-            XDocument doc = XDocument.Load("clients.xml");
+            if (this._docClients != null)
+            {
+                clients = this._docClients.Root.Elements(ClientVariableNames.BaseName)
+                                .OrderBy(Client => Client.Element(ClientVariableNames.Name).Value)
+                                .Select(Client => new
+                                {
+                                    Id = Client.Element(ClientVariableNames.Id).Value,
+                                    Name = Client.Element(ClientVariableNames.Name).Value,
+                                    Address = Client.Element(ClientVariableNames.Address).Value,
+                                    Phone = Client.Element(ClientVariableNames.Phone).Value
+                                });
+            }
 
-            var clients = doc.Descendants("client")
-                            .OrderBy(client => client.Element("name").Value)
-                            .Select(client => new
+            return clients;
+        }
+
+        public IEnumerable<object> PhoneNumberContains(string property)
+        {
+            IEnumerable<object> clients = null;
+
+            if (this._docClients != null)
+            {
+                clients = this._docClients.Root.Elements(ClientVariableNames.BaseName)
+                        .Where(Client => Client.Element(ClientVariableNames.Phone).Value.Contains(property))
+                        .Select(Client => new
+                        {
+                            Id = Client.Element(ClientVariableNames.Id).Value,
+                            Name = Client.Element(ClientVariableNames.Name).Value,
+                            Address = Client.Element(ClientVariableNames.Address).Value,
+                            Phone = Client.Element(ClientVariableNames.Phone).Value
+                        });
+            }
+
+            return clients;
+        }
+
+        public IEnumerable<object> SortedCars()
+        {
+            IEnumerable<object> carsName = null;
+
+            if (this._docCars != null)
+            {
+                carsName = this._docCars.Root.Elements(CarVariableNames.BaseName)
+                            .OrderBy(car => decimal.Parse(car.Element(CarVariableNames.Price).Value))
+                            .Select(car => new { Name = car.Element(CarVariableNames.Name).Value });
+            }
+
+            return carsName;
+        }
+
+        public IEnumerable<object> SortedXClassCars(Car.CarClasses carClass)
+        {
+            IEnumerable<object> covenants = null;
+
+            if (this._docCars != null && this._docCovenants != null)
+            {
+                var XClassCars = this._docCars.Root.Elements(CarVariableNames.BaseName)
+                            .Where(x => char.Parse(x.Element(CarVariableNames.CarClass).Value) == (int)carClass)
+                            .Select(x => int.Parse(x.Element(CarVariableNames.Id).Value))
+                            .ToList();
+
+                covenants = this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                            .Where(x => XClassCars.Contains(int.Parse(x.Element(CovenantVariableNames.CarId).Value)))
+                            .Select(x => new Covenant(int.Parse(x.Element(CovenantVariableNames.Id).Value),
+                                                        int.Parse(x.Element(CovenantVariableNames.ClientId).Value),
+                                                        int.Parse(x.Element(CovenantVariableNames.CarId).Value),
+                                                        DateTime.Parse(x.Element(CovenantVariableNames.IssueDate).Value),
+                                                        DateTime.Parse(x.Element(CovenantVariableNames.ReturnDate).Value)));
+            }
+
+            return covenants;
+        }
+
+        public IEnumerable<object> ContractWithCar(string Brand, string Name)
+        {
+            IEnumerable<object> covenants = null;
+
+            if (this._docCars != null && this._docCovenants != null)
+            {
+                var car = this._docCars.Descendants(CarVariableNames.BaseName)
+                    .Where(x => x.Element(CarVariableNames.Brand).Value == Brand && x.Element(CarVariableNames.Name).Value == Name)
+                    .Select(x => int.Parse(x.Element(CarVariableNames.Id).Value))
+                    .ToList();
+
+                covenants = this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                        .Where(x => car.Contains(int.Parse(x.Element(CovenantVariableNames.CarId).Value)))
+                        .Select(x => new Covenant(int.Parse(x.Element(CovenantVariableNames.Id).Value),
+                                                    int.Parse(x.Element(CovenantVariableNames.ClientId).Value),
+                                                    int.Parse(x.Element(CovenantVariableNames.CarId).Value),
+                                                    DateTime.Parse(x.Element(CovenantVariableNames.IssueDate).Value),
+                                                    DateTime.Parse(x.Element(CovenantVariableNames.ReturnDate).Value)));
+            }
+
+            return covenants;
+        }
+
+        public IEnumerable<object> ClientWithCar(string Brand, string Name)
+        {
+            IEnumerable<object> clients = null;
+
+            if (this._docCars != null && this._docCovenants != null && this._docClients != null)
+            {
+                var cars = this._docCars.Root.Elements(CarVariableNames.BaseName)
+                        .Where(x => x.Element(CarVariableNames.Brand).Value == Brand && x.Element(CarVariableNames.Name).Value == Name)
+                        .Select(x => int.Parse(x.Element(CarVariableNames.Id).Value))
+                        .ToList();
+
+                clients = this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                        .Where(x => cars.Contains(int.Parse(x.Element(CovenantVariableNames.CarId).Value)))
+                        .Join(this._docClients.Descendants(ClientVariableNames.BaseName),
+                            covenant => (int)covenant.Element(CovenantVariableNames.ClientId),
+                            Client => (int)Client.Element(ClientVariableNames.Id),
+                            (covenant, Client) => new { Client })
+                        .Select(x => x.Client.Element(ClientVariableNames.Name).Value);
+            }
+
+            return clients;
+        }
+
+        public IEnumerable<object> NeverTakenCars()
+        {
+            IEnumerable<object> cars = null;
+
+            if (this._docCars != null && this._docCovenants != null)
+            {
+                cars = from car in this._docCars.Root.Elements(CarVariableNames.BaseName)
+                           join covenant in this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                               on (int)car.Element(CarVariableNames.Id) equals (int)covenant.Element(CovenantVariableNames.CarId) into covenantsGroup
+                           where !covenantsGroup.Any()
+                           select new { Brand = car.Element(CarVariableNames.Brand).Value, Name = car.Element(CarVariableNames.Name).Value };
+            }
+
+            return cars;
+        }
+
+        public IEnumerable<object> ClientsWithOver2Request()
+        {
+            IEnumerable<object> clients = null;
+
+            if (this._docCovenants != null && this._docClients != null)
+            {
+                clients = from covenant in this._docCovenants.Root.Elements(CovenantVariableNames.BaseName)
+                              group covenant by (int)covenant.Element(CovenantVariableNames.ClientId) into covenantsGroup
+                              where covenantsGroup.Count() > 2
+                              join Client in this._docClients.Root.Elements(ClientVariableNames.BaseName)
+                                  on covenantsGroup.Key equals (int)Client.Element(ClientVariableNames.Id)
+                              select new { Name = Client.Element(ClientVariableNames.Name).Value };
+            }
+
+            return clients;
+        }
+
+        public IEnumerable<object> SortedClientsWithMoreThen1Car()
+        {
+            IEnumerable<object> clientsWithCars = null;
+
+            if (this._docCovenants != null && this._docCars != null && this._docClients != null)
+            {
+                clientsWithCars = this._docClients.Descendants(ClientVariableNames.BaseName)
+                    .Select(c => new
+                    {
+                        Id = c.Element(ClientVariableNames.Id).Value,
+                        Name = c.Element(ClientVariableNames.Name).Value,
+                        Cars = this._docCovenants.Descendants(CovenantVariableNames.BaseName)
+                                .Where(x => x.Element(CovenantVariableNames.ClientId).Value == c.Element(ClientVariableNames.Id).Value)
+                                .Join(this._docCars.Descendants(CarVariableNames.BaseName),
+                                    cov => cov.Element(CovenantVariableNames.CarId).Value,
+                                    car => car.Element(CarVariableNames.Id).Value,
+                                    (cov, car) => new
+                                    {
+                                        Brand = car.Element(CarVariableNames.Brand).Value,
+                                        Name = car.Element(CarVariableNames.Name).Value
+                                    })
+                    });
+            }
+
+            return clientsWithCars;
+        }
+
+        public IEnumerable<object> UniqueClientWithCarsNames()
+        {
+            if (this._docClients != null && this._docCovenants != null)
+            {
+                var uniqueClients = this._docClients.Descendants(ClientVariableNames.BaseName)
+                    .Join(this._docCovenants.Descendants(CovenantVariableNames.BaseName),
+                            Client => Client.Element(ClientVariableNames.Id).Value,
+                            covenant => covenant.Element(CovenantVariableNames.ClientId).Value,
+                            (Client, covenant) => new
                             {
-                                Id = client.Element("id").Value,
-                                Name = client.Element("name").Value,
-                                Address = client.Element("address").Value,
-                                Phone = client.Element("phone").Value
+                                Name = Client.Element(ClientVariableNames.Name).Value,
+                                CovenantId = covenant.Element(CovenantVariableNames.Id).Value,
+                                Date = DateTime.Parse(covenant.Element(CovenantVariableNames.IssueDate).Value).ToString("dd.MM.yyyy")
                             });
-
-            foreach (var client in clients)
-            {
-                Console.WriteLine($"{client.Id} {client.Name} {client.Address} {client.Phone}");
+                return uniqueClients;
             }
-
-            Console.WriteLine();
+            else
+            {
+                return null;
+            }
         }
 
-        public void PhoneNumberContains(string property)
+        public IEnumerable<object> AllNames()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"5. Print all customers who have a phone number containing {property}.");
-            Console.ResetColor();
+            IEnumerable<object> allNames = null;
 
-            XDocument doc = XDocument.Load("clients.xml");
-
-            var clients = doc.Descendants("client")
-                            .Where(client => client.Element("phone").Value.Contains(property))
-                            .Select(client => new
-                            {
-                                Id = client.Element("id").Value,
-                                Name = client.Element("name").Value,
-                                Address = client.Element("address").Value,
-                                Phone = client.Element("phone").Value
-                            });
-
-            foreach (var client in clients)
+            if (this._docClients != null && this._docCars != null)
             {
-                Console.WriteLine($"{client.Id} {client.Name} {client.Address} {client.Phone}");
+                allNames = this._docClients.Descendants(ClientVariableNames.BaseName)
+                        .Select(x => x.Element(ClientVariableNames.Name).Value)
+                        .Union(this._docCars.Descendants(CarVariableNames.BaseName)
+                        .Select(x => x.Element(CarVariableNames.Brand).Value + " " + x.Element(CarVariableNames.Name).Value));
             }
 
-            Console.WriteLine();
+            return allNames;
         }
 
-        public void SortedCars()
+        public IEnumerable<object> SortedClientsWithNewAndLuxuryCars()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("6. Print all car names, sorted by price.");
-            Console.ResetColor();
+            IEnumerable<object> allClients = null;
 
-            XDocument doc = XDocument.Load("cars.xml");
-
-            var carsName = doc.Descendants("car")
-                            .OrderBy(car => decimal.Parse(car.Element("price").Value))
-                            .Select(car => car.Element("name").Value);
-
-            foreach (var carName in carsName)
+            if (this._docClients != null && this._docCars != null && this._docCovenants != null)
             {
-                Console.WriteLine(carName);
+                var olderCarsClients = from covenant in this._docCovenants.Descendants(CovenantVariableNames.BaseName)
+                                       join car in this._docCars.Descendants(CarVariableNames.BaseName)
+                                       on (int)covenant.Element(CovenantVariableNames.CarId) equals (int)car.Element(CarVariableNames.Id)
+                                       where (int)car.Element(CarVariableNames.Year) < 2010
+                                       select (int)covenant.Element(CovenantVariableNames.ClientId);
+
+                var luxuryCarsClients = from covenant in this._docCovenants.Descendants(CovenantVariableNames.BaseName)
+                                        join car in this._docCars.Descendants(CarVariableNames.BaseName)
+                                        on (int)covenant.Element(CovenantVariableNames.CarId) equals (int)car.Element(CarVariableNames.Id)
+                                        where (int)char.Parse(car.Element(CarVariableNames.CarClass).Value) == (int)Car.CarClasses.E
+                                        select (int)covenant.Element(CovenantVariableNames.ClientId);
+
+                allClients = from Client in this._docClients.Descendants(ClientVariableNames.BaseName)
+                                 where olderCarsClients.Concat(luxuryCarsClients).Contains((int)Client.Element(ClientVariableNames.Id))
+                                 orderby (string)Client.Element(ClientVariableNames.Name)
+                                 select new Client(
+                                     (int)Client.Element(ClientVariableNames.Id), 
+                                     (string)Client.Element(ClientVariableNames.Name), 
+                                     (string)Client.Element(ClientVariableNames.Address), 
+                                     (string)Client.Element(ClientVariableNames.Phone)
+                                 );
             }
 
-            Console.WriteLine();
-        }
-
-        public void SortedXClassCars(Car.CarClasses carClass)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"7. Print all covenants with cars of class {carClass}, sorted by increasing price.");
-            Console.ResetColor();
-
-            var XClassCars = XElement.Load("cars.xml").Descendants("car")
-                    .Where(x => (int)x.Element("car-class") == (int)carClass)
-                    .Select(x => int.Parse(x.Element("id").Value))
-                    .ToList();
-
-            var covenants = XElement.Load("covenants.xml").Descendants("covenant")
-                            .Where(x => XClassCars.Contains(int.Parse(x.Element("car-id").Value)))
-                            .Select(x => new Covenant(int.Parse(x.Element("id").Value),
-                                                       int.Parse(x.Element("client-id").Value),
-                                                       int.Parse(x.Element("car-id").Value),
-                                                       DateTime.Parse(x.Element("issue-date").Value),
-                                                       DateTime.Parse(x.Element("return-date").Value)));
-
-            foreach (var covenant in covenants)
-            {
-                Console.WriteLine(covenant);
-            }
-
-            Console.WriteLine();
-        }
-
-        public void ContractWithCar(string brand, string name)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"8. Print a list of all contracts with the car {brand} {name}.");
-            Console.ResetColor();
-
-            var car = XElement.Load("cars.xml").Descendants("car")
-                    .Where(x => x.Element("brand").Value == brand && x.Element("name").Value == name)
-                    .Select(x => int.Parse(x.Element("id").Value))
-                    .ToList();
-
-            var covenants = XElement.Load("covenants.xml").Descendants("covenant")
-                            .Where(x => car.Contains(int.Parse(x.Element("car-id").Value)))
-                            .Select(x => new Covenant(int.Parse(x.Element("id").Value),
-                                                       int.Parse(x.Element("client-id").Value),
-                                                       int.Parse(x.Element("car-id").Value),
-                                                       DateTime.Parse(x.Element("issue-date").Value),
-                                                       DateTime.Parse(x.Element("return-date").Value)));
-
-            foreach (var covenant in covenants)
-            {
-                Console.WriteLine(covenant);
-            }
-
-            Console.WriteLine();
-        }
-
-        public void ClientWithCar(string brand, string name)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"9. Print all customers who have orders for {brand} {name}.");
-            Console.ResetColor();
-
-            var cars = XElement.Load("cars.xml").Descendants("car")
-                    .Where(x => x.Element("brand").Value == brand && x.Element("name").Value == name)
-                    .Select(x => int.Parse(x.Element("id").Value))
-                    .ToList();
-
-            var clients = XElement.Load("covenants.xml").Descendants("covenant")
-                            .Where(x => cars.Contains(int.Parse(x.Element("car-id").Value)))
-                            .Join(XElement.Load("clients.xml").Descendants("client"),
-                              covenant => (int)covenant.Element("client-id"),
-                              client => (int)client.Element("id"),
-                              (covenant, client) => new {
-                                  client,
-                                  covenant
-                              }).Select(x => x.client.Element("name").Value);
-
-            foreach (var client in clients)
-            {
-                Console.WriteLine(client);
-            }
-
-            Console.WriteLine();
-        }
-
-        public void NeverTakenCars()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("10. Print all cars that have not been registered for rental.");
-            Console.ResetColor();
-
-            XDocument cars = XDocument.Load("cars.xml");
-            XDocument covenants = XDocument.Load("covenants.xml");
-
-            var query = from car in cars.Descendants("car")
-                        join covenant in covenants.Descendants("covenant")
-                            on (int)car.Element("id") equals (int)covenant.Element("car-id") into covenantsGroup
-                        where !covenantsGroup.Any()
-                        select new { Brand = car.Element("brand").Value, Name = car.Element("name").Value };
-
-            foreach (var car in query)
-            {
-                Console.WriteLine($"{car.Brand} {car.Name}");
-            }
-
-            Console.WriteLine();
-        }
-
-        public void ClientsWithOver2Request()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("11. Print all customers who have more than two orders.");
-            Console.ResetColor();
-
-            XDocument covenants = XDocument.Load("covenants.xml");
-            XDocument clients = XDocument.Load("clients.xml");
-
-            var query = from covenant in covenants.Descendants("covenant")
-                        group covenant by (int)covenant.Element("client-id") into covenantsGroup
-                        where covenantsGroup.Count() > 2
-                        join client in clients.Descendants("client")
-                            on covenantsGroup.Key equals (int)client.Element("id")
-                        select new { Name = client.Element("name").Value };
-
-            foreach (var client in query)
-            {
-                Console.WriteLine(client.Name);
-            }
-
-            Console.WriteLine();
-        }
-
-        public void SortedClientsWithMoreThen1Car()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("12. Get a list of customers who have rented at least one car and sort them in ascending order of name.");
-            Console.ResetColor();
-
-            XDocument clients = XDocument.Load("clients.xml");
-            XDocument cars = XDocument.Load("cars.xml");
-            XDocument covenants = XDocument.Load("covenants.xml");
-
-            var clientsWithCars = clients.Descendants("client")
-                                         .Select(c => new {
-                                              Id = c.Element("id").Value,
-                                              Name = c.Element("name").Value,
-                                              Cars = covenants.Descendants("covenant")
-                                         .Where(x => x.Element("client-id").Value == c.Element("id").Value)
-                                         .Join(cars.Descendants("car"),
-                                              cov => cov.Element("car-id").Value,
-                                              car => car.Element("id").Value,
-                                              (cov, car) => new {
-                                                  Brand = car.Element("brand").Value,
-                                                  Name = car.Element("name").Value
-                                              })
-                                         });
-
-            foreach (var clientWithCars in clientsWithCars)
-            {
-                Console.WriteLine(clientWithCars.Name);
-                foreach (var car in clientWithCars.Cars)
-                {
-                    Console.WriteLine($" - {car.Brand} {car.Name}");
-                }
-            }
-
-            Console.WriteLine();
-        }
-
-        public void UniqueClientWithCarsNames()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("13. Print a list of all covenant numbers with the names of the customers who made them and the date of deal.");
-            Console.ResetColor();
-
-            XDocument covenants = XDocument.Load("covenants.xml");
-            XDocument clients = XDocument.Load("clients.xml");
-
-            var uniqueClients = clients.Descendants("client")
-                                        .Join(covenants.Descendants("covenant"),
-                                              client => client.Element("id").Value,
-                                              covenant => covenant.Element("client-id").Value,
-                                              (client, covenant) => new
-                                              {
-                                                  Name = client.Element("name").Value,
-                                                  CovenantId = covenant.Element("id").Value,
-                                                  Date = DateTime.Parse(covenant.Element("issue-date").Value).ToString("dd.MM.yyyy")
-                                              });
-
-            foreach (var client in uniqueClients)
-            {
-                Console.WriteLine(client);
-            }
-
-            Console.WriteLine();
-        }
-
-        public void AllNames()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("14. Print a list of all customer and car names.");
-            Console.ResetColor();
-
-            XDocument cars = XDocument.Load("cars.xml");
-            XDocument clients = XDocument.Load("clients.xml");
-
-            var allNames = clients.Descendants("client").Select(x => x.Element("name").Value)
-                                        .Union(cars.Descendants("car")
-                                        .Select(x => x.Element("brand").Value + " " + x.Element("name").Value));
-
-            foreach (var name in allNames)
-            {
-                Console.WriteLine(name);
-            }
-
-            Console.WriteLine();
-        }
-
-        public void SortedClientsWithNewAndLuxuryCars()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("15. Print all customers who took cars older than 2010 and all customers who took cars of the \"Luxury\" class, and display them in alphabetical order by customer name.");
-            Console.ResetColor();
-
-            XDocument covenants = XDocument.Load("covenants.xml");
-            XDocument cars = XDocument.Load("cars.xml");
-            XDocument clients = XDocument.Load("clients.xml");
-
-            var olderCarsClients = from covenant in covenants.Descendants("covenant")
-                                   join car in cars.Descendants("car")
-                                   on (int)covenant.Element("car-id") equals (int)car.Element("id")
-                                   where (int)car.Element("year") < 2010
-                                   select (int)covenant.Element("client-id");
-
-            var luxuryCarsClients = from covenant in covenants.Descendants("covenant")
-                                    join car in cars.Descendants("car")
-                                    on (int)covenant.Element("car-id") equals (int)car.Element("id")
-                                    where (int)car.Element("car-class") == (int)Car.CarClasses.E
-                                    select (int)covenant.Element("client-id");
-
-            var allClients = from client in clients.Descendants("client")
-                          where olderCarsClients.Concat(luxuryCarsClients).Contains((int)client.Element("id"))
-                          orderby (string)client.Element("name")
-                          select new Client((int)client.Element("id"), (string)client.Element("name"), (string)client.Element("address"), (string)client.Element("phone"));
-
-            foreach (var client in allClients)
-            {
-                Console.WriteLine(client);
-            }
-
-            Console.WriteLine();
+            return allClients;
         }
     }
 }

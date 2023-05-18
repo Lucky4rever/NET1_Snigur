@@ -7,16 +7,20 @@ using DOTNET.Variant20.NET1;
 using DOTNET.Variant20.NET1.Invoker;
 using DOTNET.Variant20.NET2.XMLConverter;
 using DOTNET.Variant20.NET2.ComponentCreator;
+using DOTNET.Variant20.NET3.Shape;
+using DOTNET.Variant20.NET3.AbstractFactory;
 
 using NET1 = DOTNET.Variant20.NET1;
 using NET2 = DOTNET.Variant20.NET2;
+using DOTNET.Variant20.NET3;
 
 namespace DOTNET {
     class Program {
         private static void Main() {
 
             //Lab1();
-            Lab2();
+            //Lab2();
+            Lab3();
 
             Console.ReadLine();
         }
@@ -66,40 +70,82 @@ namespace DOTNET {
 
             //==================================Fill data======================================
 
+            //==============Convert from XML:
             XMLConverterContext converter = new XMLConverterContext();
 
             converter.SetStrategy(new CarsXMLConverter());
-            Data.Cars = (List<Car>)converter.ConvertFromXML("cars");
+            Data.Cars = (List<Car>)converter.ConvertFromXML();
 
             converter.SetStrategy(new ClientsXMLConverter());
-            Data.Clients = (List<Client>)converter.ConvertFromXML("clients");
+            Data.Clients = (List<Client>)converter.ConvertFromXML();
 
             converter.SetStrategy(new CovenantsXMLConverter());
-            Data.Covenants = (List<Covenant>)converter.ConvertFromXML("covenants");
+            Data.Covenants = (List<Covenant>)converter.ConvertFromXML();
+
+            //============== Convert to XML:
+            //XMLConverterContext converter = new XMLConverterContext();
 
             //converter.SetStrategy(new CarsXMLConverter());
-            //converter.ConvertToXML("cars", Data.Cars);
+            //converter.ConvertToXML(Data.Cars);
 
+            //converter.SetStrategy(new ClientsXMLConverter());
+            //converter.ConvertToXML(Data.Clients);
+
+            //converter.SetStrategy(new CovenantsXMLConverter());
+            //converter.ConvertToXML(Data.Covenants);
+
+
+            //Create new member:
             //ComponentCreatorContext componentCreator = new ComponentCreatorContext();
             //componentCreator.SetStrategy(new ClientComponentCreator());
             //componentCreator.NewComponent();
+
             //Console.WriteLine(Data.Clients[Data.Clients.Count - 1]);
 
 
             //====================================Program======================================
 
-            NET2.Functional functional = new NET2.Functional();
+            NET2.FunctionalBuilder builder = new NET2.FunctionalBuilder();
+            builder.SetCarsDocument(CarsXMLConverter.xmlFileName, CarsXMLConverter.xsdFileName);
+            builder.SetClientsDocument(ClientsXMLConverter.xmlFileName, ClientsXMLConverter.xsdFileName);
+            builder.SetCovenantsDocument(CovenantsXMLConverter.xmlFileName, CovenantsXMLConverter.xsdFileName);
+
+            NET2.Functional functional = builder.Build();
             Invoker invoker = new Invoker();
 
             //Console.Write("Print number of task you want to do: ");
             //int TaskNumber = int.Parse(Console.ReadLine());
-            //invoker.SetAction(new Command(functional.TaskMap[(NET2.Functional.TaskNumber)TaskNumber]));
+            //invoker.SetAction(new Command(functional.TaskMap[NET2.TaskNumber.GetGeneralTaskNumber(TaskNumber)].Output()));
 
             //Console.WriteLine($"Running action {TaskNumber}...");
             //invoker.StartDoingAction();
 
 
-            invoker.StartDoingBlockOfAction(functional.TaskMap);
+            invoker.SetBlockOfAction(functional.TaskMap);
+            invoker.StartDoingBlockOfAction();
+        }
+
+        private static void Lab3()
+        {
+            ShapeFactory factory = ShapeFactory.GetInstance();
+
+            Cycle cycle1 = factory.CreateCycle(1);
+            Cycle cycle2 = factory.CreateCycle(8);
+            Rectangle rectangle = factory.CreateRectangle(8, 19);
+            Triangle triangle = factory.CreateTriangle(3, 4, 5);
+
+            PolygonBuilder builder = new PolygonBuilder();
+
+            builder.AddCycle(cycle1);
+            builder.AddCycle(cycle2);
+            builder.AddRectangle(rectangle);
+            builder.AddTriangle(triangle);
+
+            Polygon shape = builder.Build();
+
+            shape.PrintInfo();
+            shape.PrintAllAreas();
+            shape.PrintAllPerimeters();
         }
     }
 }

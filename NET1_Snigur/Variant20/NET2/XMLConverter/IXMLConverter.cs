@@ -8,7 +8,7 @@ namespace DOTNET.Variant20.NET2.XMLConverter
 {
     interface IXMLConverter
     {
-        void ConvertToXML(string fileName, object variables);
-        object ConvertFromXML(string fileName);
+        void ConvertToXML(object variables);
+        object ConvertFromXML();
     }
 }

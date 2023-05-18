@@ -17,14 +17,14 @@ namespace DOTNET.Variant20.NET2.XMLConverter
             this._XMLConverter = XMLConverter;
         }
 
-        public void ConvertToXML(string fileName, object variables)
+        public void ConvertToXML(object variables)
         {
-            this._XMLConverter.ConvertToXML(fileName, variables);
+            this._XMLConverter.ConvertToXML(variables);
         }
 
-        public object ConvertFromXML(string fileName)
+        public object ConvertFromXML()
         {
-            return this._XMLConverter.ConvertFromXML(fileName);
+            return this._XMLConverter.ConvertFromXML();
         }
     }
 }

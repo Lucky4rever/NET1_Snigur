@@ -5,53 +5,46 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace DOTNET.Variant20.NET2.XMLConverter
 {
     class CovenantsXMLConverter : IXMLConverter
     {
-        private XmlWriterSettings settings = new XmlWriterSettings
-        {
-            Indent = true
-        };
+        public static readonly string xmlFileName = "covenants.xml";
+        public static readonly string xsdFileName = "covenants.xsd";
 
-        public void ConvertToXML(string fileName, object variables)
+        public void ConvertToXML(object variables)
         {
-            using (XmlWriter writer = XmlWriter.Create(fileName + ".xml", settings))
+            using (XmlWriter writer = XmlWriter.Create(xmlFileName))
             {
-                writer.WriteStartElement("covenants");
-
-                foreach (Covenant covenant in variables as List<Covenant>)
-                {
-                    writer.WriteStartElement("covenant");
-                    writer.WriteElementString("id", covenant.Id.ToString());
-                    writer.WriteElementString("client-id", covenant.ClientId.ToString());
-                    writer.WriteElementString("car-id", covenant.CarId.ToString());
-                    writer.WriteElementString("issue-date", covenant.IssueDate.ToString());
-                    writer.WriteElementString("return-date", covenant.ReturnDate.ToString());
-                    writer.WriteEndElement();
-                }
-
-                writer.WriteEndElement();
+                XmlSerializer serializer = new XmlSerializer(variables.GetType());
+                serializer.Serialize(writer, variables);
             }
         }
 
-        public object ConvertFromXML(string fileName)
+        public object ConvertFromXML()
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(fileName + ".xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Covenant>));
             List<Covenant> variables = new List<Covenant>();
 
-            foreach (XmlNode node in doc.SelectNodes("covenants/covenant"))
+            XmlReaderSettings settings = new XmlReaderSettings
             {
-                int id = int.Parse(node.SelectSingleNode("id").InnerText);
-                int clientId = int.Parse(node.SelectSingleNode("client-id").InnerText);
-                int carId = int.Parse(node.SelectSingleNode("car-id").InnerText);
-                DateTime issueDate = DateTime.Parse(node.SelectSingleNode("issue-date").InnerText);
-                DateTime returnDate = DateTime.Parse(node.SelectSingleNode("return-date").InnerText);
+                ValidationType = ValidationType.Schema
+            };
+            settings.Schemas.Add(null, xsdFileName);
 
-                Covenant covenant = new Covenant(id, clientId, carId, issueDate, returnDate);
-                variables.Add(covenant);
+            using (FileStream fileStream = new FileStream(xmlFileName, FileMode.Open))
+            {
+                try
+                {
+                    variables = (List<Covenant>)serializer.Deserialize(fileStream);
+                }
+                catch (XmlSchemaValidationException ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             }
 
             return variables;

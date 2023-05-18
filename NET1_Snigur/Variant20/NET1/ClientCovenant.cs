@@ -1,6 +1,6 @@
 ﻿namespace DOTNET.Variant20.NET1
 {
-    class ClientCovenant
+    public class ClientCovenant
     {
         public int ClientId { get; set; }
         public int CovenantId { get; set; }

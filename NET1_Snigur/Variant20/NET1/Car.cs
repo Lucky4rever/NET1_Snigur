@@ -1,13 +1,29 @@
-﻿namespace DOTNET.Variant20.NET1
+﻿using DOTNET.Variant20.NET2.XMLConverter.VariableNames;
+using System;
+using System.Xml.Serialization;
+
+namespace DOTNET.Variant20.NET1
 {
-    class Car
+    [Serializable, XmlRoot(ElementName = CarVariableNames.BaseName)]
+    public class Car
     {
-        public int Id { get; }
-        public string Brand { get; }
-        public string Name { get; }
-        public decimal Price { get; }
-        public CarClasses CarClass { get; }
-        public int Year { get; }
+        [XmlAttribute(AttributeName = CarVariableNames.Id)]
+        public int Id { get; set; }
+
+        [XmlAttribute(AttributeName = CarVariableNames.Brand)]
+        public string Brand { get; set; }
+
+        [XmlAttribute(AttributeName = CarVariableNames.Name)]
+        public string Name { get; set; }
+
+        [XmlAttribute(AttributeName = CarVariableNames.Price)]
+        public decimal Price { get; set; }
+
+        [XmlAttribute(AttributeName = CarVariableNames.CarClass)]
+        public CarClasses CarClass { get; set; }
+
+        [XmlAttribute(AttributeName = CarVariableNames.Year)]
+        public int Year { get; set; }
 
         public enum CarClasses : int
         {
@@ -22,7 +38,6 @@
         }
 
         public Car() { }
-
         public Car(int Id, string Brand, string Name, CarClasses CarClass, decimal Price, int Year)
         {
             this.Id = Id;
@@ -32,6 +47,7 @@
             this.Price = Price;
             this.Year = Year;
         }
+
         public override string ToString()
         {
             return "A " + Brand + " " + Name + " " + CarClass + "-class car for " + Price;
