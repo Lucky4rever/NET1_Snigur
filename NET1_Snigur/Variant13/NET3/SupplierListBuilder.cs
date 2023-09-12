@@ -4,21 +4,21 @@ namespace DOTNET.Variant13.NET3
 {
     class SupplierListBuilder
     {
-        private readonly List<SupplierListItem> List;
+        private readonly List<SupplierListItem> _list;
 
         public SupplierListBuilder()
         {
-            this.List = new List<SupplierListItem>();
+            this._list = new List<SupplierListItem>();
         }
 
         public void AddNewPosition(SupplierListItem item)
         {
-            this.List.Add(item);
+            this._list.Add(item);
         }
 
         public List<SupplierListItem> Build()
         {
-            return this.List;
+            return this._list;
         }
     }
 }

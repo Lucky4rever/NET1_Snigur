@@ -8,16 +8,21 @@ namespace DOTNET.Variant13.NET3
 {
     class SuppliersList
     {
-        public List<Supplier> Suppliers;
+        private readonly List<Supplier> _suppliers;
 
         public SuppliersList()
         {
-            this.Suppliers = new List<Supplier>();
+            this._suppliers = new List<Supplier>();
+        }
+
+        public void AddSupplier(Supplier supplier)
+        {
+            this._suppliers.Add(supplier);
         }
 
         public SupplierListItem FindBestItem(Material material, int count, int maxPrice)
         {
-            List<SupplierListItem> list = Suppliers
+            List<SupplierListItem> list = _suppliers
                 .SelectMany(supplier => supplier
                     .GetItemList()
                     .Where(item => 
@@ -36,7 +41,7 @@ namespace DOTNET.Variant13.NET3
 
         public Supplier FindSupplier(Material material, int count, int maxPrice)
         {
-            Supplier perfectSupplier = Suppliers.Find(
+            Supplier perfectSupplier = _suppliers.Find(
                     supplier => supplier.GetItemList().FindAll(
                             item => item.Material == material
                             && item.MaxCount >= count

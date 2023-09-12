@@ -6,7 +6,7 @@
 
         public override string ToString()
         {
-            return "Concrete";
+            return $"Concrete ({this.Count} bags)";
         }
     }
 }

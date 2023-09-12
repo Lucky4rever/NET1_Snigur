@@ -8,28 +8,28 @@ namespace DOTNET.Variant13.NET3
 {
     class Supplier
     {
-        public string Name;
-        private List<SupplierListItem> ItemList;
+        public readonly string Name;
+        private List<SupplierListItem> _itemList;
 
         public Supplier(string name)
         {
             this.Name = name;
-            this.ItemList = new List<SupplierListItem>();
+            this._itemList = new List<SupplierListItem>();
         }
 
         public void SetItemList(List<SupplierListItem> list)
         {
-            this.ItemList = list;
+            this._itemList = list;
         }
 
         public void AddItemToList(SupplierListItem item)
         {
-            this.ItemList.Add(item);
+            this._itemList.Add(item);
         }
 
         public List<SupplierListItem> GetItemList()
         {
-            return this.ItemList;
+            return this._itemList;
         }
     }
 }

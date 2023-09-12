@@ -1,15 +1,10 @@
-﻿namespace DOTNET.Variant13.NET3
+﻿using DOTNET.Variant13.NET3.Materials;
+
+namespace DOTNET.Variant13.NET3
 {
     class Brick : Material
     {
-        public enum BrickType
-        {
-            Ceramic,
-            Clinker,
-            Silicate
-        }
-
-        public BrickType Type;
+        private BrickType Type { get; set; }
 
         public Brick(BrickType type, int count) : base(count)
         {
@@ -18,7 +13,7 @@
 
         public override string ToString()
         {
-            return $"{this.Type} brick";
+            return $"{this.Type} brick ({this.Count} pieces)";
         }
     }
 }

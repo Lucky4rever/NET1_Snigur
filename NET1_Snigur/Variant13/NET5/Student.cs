@@ -4,14 +4,15 @@ namespace DOTNET.Variant13.NET5
 {
     class Student
     {
-        public readonly string Name;
-        private int Assessment;
-        private Task Task = null;
+        public string Name { get; private set; }
+        private int Assessment { get; set; }
+        private Task Task { get; set; }
 
         public Student(string name)
         {
             this.Name = name;
             this.Assessment = 0;
+            this.Task = null;
         }
 
         public void GiveTask(string description)

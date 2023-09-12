@@ -4,8 +4,8 @@ namespace DOTNET.Variant13.NET5
 {
     class Solution
     {
-        private TaskStatus Status;
-        private readonly Action Result;
+        private TaskStatus Status { get; set; }
+        private Action Result { get; set; }
 
         public Solution(Action result)
         {

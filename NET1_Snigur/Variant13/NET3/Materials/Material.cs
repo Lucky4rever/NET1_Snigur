@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DOTNET.Variant13.NET3
+﻿namespace DOTNET.Variant13.NET3
 {
     abstract class Material
     {
-        public int Count;
+        protected int Count { get; set; }
 
         public Material(int count)
         {
@@ -17,7 +11,7 @@ namespace DOTNET.Variant13.NET3
 
         public override string ToString()
         {
-            return "Material";
+            return $"Material ({this.Count})";
         }
     }
 }

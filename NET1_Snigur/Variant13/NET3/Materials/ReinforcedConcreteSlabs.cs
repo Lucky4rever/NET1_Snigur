@@ -2,8 +2,8 @@
 {
     class ReinforcedConcreteSlabs : Material
     {
-        public int Width;
-        public int Lenght;
+        private int Width { get; set; }
+        private int Lenght { get; set; }
 
         public ReinforcedConcreteSlabs(int lenght, int width, int count) : base(count)
         {

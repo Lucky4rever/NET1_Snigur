@@ -8,9 +8,9 @@ namespace DOTNET.Variant13.NET3
 {
     class SupplierListItem
     {
-        public Material Material;
-        public int MaxCount;
-        public decimal PriceForSet;
+        public Material Material { get; set; }
+        public int MaxCount { get; set; }
+        public decimal PriceForSet { get; set; }
 
         public SupplierListItem(Material material, int count, int price)
         {

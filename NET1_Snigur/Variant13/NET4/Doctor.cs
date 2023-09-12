@@ -2,15 +2,8 @@
 {
     class Doctor
     {
-        public string Name;
-        public DoctorPosition Position;
-
-        public enum DoctorPosition
-        {
-            Therapist,
-            Surgeon,
-            Intensivist
-        }
+        public string Name { get; private set; }
+        public DoctorPosition Position { get; private set; }
 
         public Doctor(string name, DoctorPosition position)
         {

@@ -5,15 +5,15 @@ namespace DOTNET.Variant13.NET5
 {
     class Task
     {
-        public readonly string Description;
-        private int Assessment;
-
-        private Solution Solution = null;
+        public string Description { get; private set; }
+        private int Assessment { get; set; }
+        private Solution Solution { get; set; }
 
         public Task(string description)
         {
             this.Description = description;
             this.Assessment = 0;
+            this.Solution = null;
         }
 
         public void SetTaskStatus(TaskStatus state)

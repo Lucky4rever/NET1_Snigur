@@ -1,4 +1,5 @@
 ﻿using DOTNET.Variant13.NET3;
+using DOTNET.Variant13.NET3.Materials;
 using DOTNET.Variant13.NET4;
 using DOTNET.Variant13.NET5;
 
@@ -34,9 +35,9 @@ namespace DOTNET {
 
         private static void Var13_Lab3()
         {
-            Material brick1 = new Brick(Brick.BrickType.Ceramic, 100);
-            Material brick2 = new Brick(Brick.BrickType.Clinker, 100);
-            Material brick3 = new Brick(Brick.BrickType.Silicate, 100);
+            Material brick1 = new Brick(BrickType.Ceramic, 100);
+            Material brick2 = new Brick(BrickType.Clinker, 100);
+            Material brick3 = new Brick(BrickType.Silicate, 100);
             Material concrete = new Concrete(1);
             Material slabs = new ReinforcedConcreteSlabs(10, 10, 3);
 
@@ -81,7 +82,7 @@ namespace DOTNET {
         {
             RecipeStorage storage = new RecipeStorage();
 
-            Doctor doctor = new Doctor("Snigur Pavlo", Doctor.DoctorPosition.Therapist);
+            Doctor doctor = new Doctor("Snigur Pavlo", DoctorPosition.Therapist);
 
             Patient patient1 = new Patient("Andrey Semko");
             Patient patient2 = new Patient("Dmitry Manov");

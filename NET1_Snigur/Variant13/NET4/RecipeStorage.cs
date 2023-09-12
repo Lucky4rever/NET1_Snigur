@@ -8,31 +8,31 @@ namespace DOTNET.Variant13.NET4
 {
     class RecipeStorage
     {
-        private readonly List<Recipe> Recipes;
+        private readonly List<Recipe> _recipes;
 
         public RecipeStorage()
         {
-            this.Recipes = new List<Recipe>();
+            this._recipes = new List<Recipe>();
         }
 
         public void AddRecipe(Recipe recipe)
         {
-            this.Recipes.Add(recipe);
+            this._recipes.Add(recipe);
         }
 
         public void RemoveRecipe(Recipe recipe)
         {
-            this.Recipes.Remove(recipe);
+            this._recipes.Remove(recipe);
         }
 
         public List<Recipe> GetRecipes()
         {
-            return this.Recipes;
+            return this._recipes;
         }
 
         public void CheckDate()
         {
-            List<Recipe> recipesCopy = new List<Recipe>(this.Recipes);
+            List<Recipe> recipesCopy = new List<Recipe>(this._recipes);
 
             recipesCopy.ForEach(recipe =>
             {
@@ -45,12 +45,12 @@ namespace DOTNET.Variant13.NET4
 
         public Recipe GetPatientRecipe(Patient patient)
         {
-            return this.Recipes.Find(recipe => recipe.Patient == patient);
+            return this._recipes.Find(recipe => recipe.Patient == patient);
         }
 
         public void IncreaseEndDate(Recipe recipe, double days)
         {
-            this.Recipes
+            this._recipes
                 .Find(_recipe => _recipe == recipe)
                 .IncreaseEndDate(days);
         }

@@ -5,10 +5,10 @@ namespace DOTNET.Variant13.NET4
 {
     class Recipe
     {
-        public string Description;
-        public Doctor Doctor;
-        public Patient Patient;
-        public DateTime EndDate;
+        public string Description { get; set; }
+        public Doctor Doctor { get; set; }
+        public Patient Patient { get; set; }
+        public DateTime EndDate { get; set; }
 
         public Recipe() { }
 

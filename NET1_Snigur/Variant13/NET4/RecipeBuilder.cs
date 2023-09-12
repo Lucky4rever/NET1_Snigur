@@ -4,36 +4,36 @@ namespace DOTNET.Variant13.NET4
 {
     class RecipeBuilder
     {
-        private readonly Recipe Recipe;
+        private readonly Recipe _recipe;
 
         public RecipeBuilder()
         {
-            this.Recipe = new Recipe();
+            this._recipe = new Recipe();
         }
 
         public void SetDescription(string description)
         {
-            this.Recipe.Description = description;
+            this._recipe.Description = description;
         }
 
         public void SetDoctor(Doctor doctor)
         {
-            this.Recipe.Doctor = doctor;
+            this._recipe.Doctor = doctor;
         }
 
         public void SetPatient(Patient patient)
         {
-            this.Recipe.Patient = patient;
+            this._recipe.Patient = patient;
         }
 
         public void SetEndDate(DateTime endDate)
         {
-            this.Recipe.EndDate = endDate.Date;
+            this._recipe.EndDate = endDate.Date;
         }
 
         public Recipe Build()
         {
-            return this.Recipe;
+            return this._recipe;
         }
     }
 }
