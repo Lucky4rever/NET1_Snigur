@@ -19,7 +19,7 @@ using System.Collections.Generic;
 namespace DOTNET {
     class Program {
         private static void Main() {
-            Labs labs = new Labs();
+            Labs labs = Labs.GetInstance();
 
             //labs.Var20_Lab1();
             //labs.Var20_Lab2();
