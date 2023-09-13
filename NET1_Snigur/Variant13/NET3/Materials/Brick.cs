@@ -1,6 +1,4 @@
-﻿using DOTNET.Variant13.NET3.Materials;
-
-namespace DOTNET.Variant13.NET3
+﻿namespace DOTNET.Variant13.NET3.Materials
 {
     class Brick : Material
     {

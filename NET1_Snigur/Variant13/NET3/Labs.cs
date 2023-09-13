@@ -10,47 +10,35 @@ namespace DOTNET
         {
             Console.WriteLine("Variant 13\nVariant 3\n");
 
-            Material brick1 = new Brick(BrickType.Ceramic, 100);
-            Material brick2 = new Brick(BrickType.Clinker, 100);
-            Material brick3 = new Brick(BrickType.Silicate, 100);
-            Material concrete = new Concrete(1);
-            Material slabs = new ReinforcedConcreteSlabs(10, 10, 3);
+            MaterialFabric fabric = new MaterialFabric();
+
+            Material brick1 = fabric.CreateBrick(BrickType.Ceramic, 100);
+            Material brick2 = fabric.CreateBrick(BrickType.Clinker, 100);
+            Material brick3 = fabric.CreateBrick(BrickType.Silicate, 100);
+            Material concrete = fabric.CreateConcrete(1);
+            Material slabs = fabric.CreateReinforcedConcreteSlabs(10, 10, 3);
 
 
+            Supplier supplier1 = new Supplier("Grand Supplier");
 
-            Supplier supplier1 = new Supplier("Контора");
-
-            SupplierListBuilder builder = new SupplierListBuilder();
-
-            builder.AddNewPosition(new SupplierListItem(brick1, 45, 100));
-            builder.AddNewPosition(new SupplierListItem(brick2, 40, 140));
-            builder.AddNewPosition(new SupplierListItem(brick3, 80, 90));
-
-            supplier1.SetItemList(builder.Build());
-
+            supplier1.AddItemToList(new SupplierListItem(brick1, 45, 100));
+            supplier1.AddItemToList(new SupplierListItem(brick2, 40, 140));
+            supplier1.AddItemToList(new SupplierListItem(brick3, 80, 90));
 
 
             Supplier supplier2 = new Supplier("Буд-матеріали");
 
-            builder = new SupplierListBuilder();
-
-            builder.AddNewPosition(new SupplierListItem(brick2, 30, 110));
-            builder.AddNewPosition(new SupplierListItem(concrete, 1, 5));
-            builder.AddNewPosition(new SupplierListItem(slabs, 10, 500));
-
-            supplier2.SetItemList(builder.Build());
+            supplier1.AddItemToList(new SupplierListItem(brick2, 30, 110));
+            supplier1.AddItemToList(new SupplierListItem(concrete, 1, 5));
+            supplier1.AddItemToList(new SupplierListItem(slabs, 10, 500));
 
 
+            SuppliersList suppliersList = new SuppliersList();
 
-            SuppliersListBuilder suppliersListBuilder = new SuppliersListBuilder();
-
-            suppliersListBuilder.AddSupplier(supplier1);
-            suppliersListBuilder.AddSupplier(supplier2);
-
-            SuppliersList suppliersList = suppliersListBuilder.Build();
+            suppliersList.AddSupplier(supplier1);
+            suppliersList.AddSupplier(supplier2);
 
             Console.WriteLine(suppliersList.FindBestItem(brick2, 20, 150));
-
         }
     }
 }

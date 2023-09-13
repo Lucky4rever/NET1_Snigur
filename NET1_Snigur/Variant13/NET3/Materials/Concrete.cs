@@ -1,4 +1,4 @@
-﻿namespace DOTNET.Variant13.NET3
+﻿namespace DOTNET.Variant13.NET3.Materials
 {
     class Concrete : Material
     {
