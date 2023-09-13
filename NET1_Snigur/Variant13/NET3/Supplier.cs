@@ -31,5 +31,10 @@ namespace DOTNET.Variant13.NET3
         {
             return this._itemList;
         }
+
+        public override string ToString()
+        {
+            return $"Supplier \"{this.Name}\"";
+        }
     }
 }

@@ -38,7 +38,12 @@ namespace DOTNET
             suppliersList.AddSupplier(supplier1);
             suppliersList.AddSupplier(supplier2);
 
-            Console.WriteLine(suppliersList.FindBestItem(brick2, 20, 150));
+            SupplierListItem bestItem = suppliersList.FindBestItem(brick2, 20, 150);
+
+            Supplier bestSupplier = suppliersList.FindSupplier(bestItem);
+
+            Console.WriteLine(bestItem);
+            Console.WriteLine(bestSupplier);
         }
     }
 }

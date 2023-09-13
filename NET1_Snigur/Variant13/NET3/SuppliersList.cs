@@ -37,6 +37,17 @@ namespace DOTNET.Variant13.NET3
             return bestItem;
         }
 
+        public Supplier FindSupplier(SupplierListItem item)
+        {
+            Supplier perfectSupplier = _suppliers.Find(
+                    supplier => supplier.GetItemList().FindAll(
+                            _item => _item == item
+                            ) != null
+                );
+
+            return perfectSupplier;
+        }
+
         public Supplier FindSupplier(Material material, int count, int maxPrice)
         {
             Supplier perfectSupplier = _suppliers.Find(
