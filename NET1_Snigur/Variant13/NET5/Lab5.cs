@@ -1,10 +1,23 @@
-﻿using DOTNET.Variant13.NET5;
-using System;
+﻿using System;
 
-namespace DOTNET
+namespace DOTNET.Variant13.NET5
 {
-    partial class Labs
+    class Lab5
     {
+        private static Lab5 _instance;
+
+        private Lab5() { }
+
+        public static Lab5 GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Lab5();
+            }
+
+            return _instance;
+        }
+
         public void Var13_Lab5()
         {
             Console.WriteLine("Variant 13\nVariant 5\n");
@@ -37,6 +50,8 @@ namespace DOTNET
             student1.SetAssessment(12);
 
             Console.WriteLine(student1.ShowTask());
+
+            Console.WriteLine();
         }
     }
 }

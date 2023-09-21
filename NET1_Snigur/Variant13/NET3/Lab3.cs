@@ -1,11 +1,24 @@
-﻿using DOTNET.Variant13.NET3;
-using DOTNET.Variant13.NET3.Materials;
+﻿using DOTNET.Variant13.NET3.Materials;
 using System;
 
-namespace DOTNET
+namespace DOTNET.Variant13.NET3
 {
-    partial class Labs
+    class Lab3
     {
+        private static Lab3 _instance;
+
+        private Lab3() { }
+
+        public static Lab3 GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Lab3();
+            }
+
+            return _instance;
+        }
+
         public void Var13_Lab3()
         {
             Console.WriteLine("Variant 13\nVariant 3\n");
@@ -44,6 +57,8 @@ namespace DOTNET
 
             Console.WriteLine(bestItem);
             Console.WriteLine(bestSupplier);
+
+            Console.WriteLine();
         }
     }
 }

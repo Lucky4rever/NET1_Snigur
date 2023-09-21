@@ -1,10 +1,23 @@
-﻿using DOTNET.Variant13.NET4;
-using System;
+﻿using System;
 
-namespace DOTNET
+namespace DOTNET.Variant13.NET4
 {
-    partial class Labs
+    class Lab4
     {
+        private static Lab4 _instance;
+
+        private Lab4() { }
+
+        public static Lab4 GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Lab4();
+            }
+
+            return _instance;
+        }
+
         public void Var13_Lab4()
         {
             Console.WriteLine("Variant 13\nVariant 4\n");
@@ -58,6 +71,8 @@ namespace DOTNET
             storage.IncreaseEndDate(storage.GetPatientRecipe(patient2), 20);
 
             Console.WriteLine(storage.GetPatientRecipe(patient2));
+
+            Console.WriteLine();
         }
     }
 }
